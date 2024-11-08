@@ -6,6 +6,9 @@
 
 FILE* output_file;
 
+pthread_mutex_t logBuf_mutex = PTHREAD_MUTEX_INITIALIZER;
+
+
 struct operation {
     char* name;
     int value;
@@ -180,7 +183,6 @@ void* threadExecution(void* arg) {
     int i = 0;
     while (op != NULL) {
         if (i == 10) {
-            pthread_mutex_t logBuf_mutex = PTHREAD_MUTEX_INITIALIZER;
             pthread_mutex_lock(&logBuf_mutex);
             logBuf(printbuf, 10);
             pthread_mutex_unlock(&logBuf_mutex);
@@ -192,7 +194,7 @@ void* threadExecution(void* arg) {
         free(op);
         op = next;
     }
-    pthread_mutex_t logBuf_mutex = PTHREAD_MUTEX_INITIALIZER;
+    // pthread_mutex_t logBuf_mutex = PTHREAD_MUTEX_INITIALIZER;
     pthread_mutex_lock(&logBuf_mutex);
     logBuf(printbuf, i);
     pthread_mutex_unlock(&logBuf_mutex);
